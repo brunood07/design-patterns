@@ -5,11 +5,13 @@ import br.com.bruno.store.budget.situation.Finished;
 import br.com.bruno.store.budget.situation.InAnalysis;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Budget {
+public class Budget implements Budgetable {
     private BigDecimal value;
-    private int quantityOfItems;
     private BudgetSituation situation;
+    private List<Budgetable> items;
 
     public BudgetSituation getSituation() {
         return situation;
@@ -20,9 +22,9 @@ public class Budget {
     }
 
 
-    public Budget(BigDecimal value, int quantityOfItems) {
-        this.value = value;
-        this.quantityOfItems = quantityOfItems;
+    public Budget() {
+        this.value = BigDecimal.ZERO;
+        this.items = new ArrayList<>();
         this.situation = new InAnalysis();
     }
 
@@ -43,14 +45,24 @@ public class Budget {
     }
 
     public BigDecimal getValue() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return value;
     }
 
     public int getQuantityOfItems() {
-        return quantityOfItems;
+        return items.size();
     }
 
     public boolean isFinished() {
         return situation instanceof Finished;
+    }
+
+    public void addItem(Budgetable item) {
+        this.value = value.add(item.getValue());
+        this.items.add(item);
     }
 }
